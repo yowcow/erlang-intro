@@ -1,6 +1,8 @@
 -module(my_module).
 
+-include("config.hrl").
+
 -export([hello/0]).
 
 hello() ->
-    io:format("Hello world~n", []).
+    io_lib:format("Hello world ~p~n", [?MYID]).

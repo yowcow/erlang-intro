@@ -3,4 +3,4 @@
 -include_lib("eunit/include/eunit.hrl").
 
 hello_test() ->
-    ?assert(my_module:hello() == io:format("Hello world~n", [])).
+    ?assertEqual(my_module:hello(), io_lib:format("Hello world ~p~n", [12345])).
