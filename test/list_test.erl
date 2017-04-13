@@ -84,7 +84,7 @@ list_max([Head | Rest]) ->
 list_max([Head | Rest], Current_max) when Head > Current_max ->
     list_max(Rest, Head);
 
-list_max([Head | Rest], Current_max) ->
+list_max([_ | Rest], Current_max) ->
     list_max(Rest, Current_max);
 
 list_max([], Current_max) ->

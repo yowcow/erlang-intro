@@ -52,7 +52,7 @@ duplicate_test() ->
 
 tail_duplicate(N, T) -> tail_duplicate(N, T, []).
 
-tail_duplicate(0, T, Acc) -> Acc;
+tail_duplicate(0, _, Acc) -> Acc;
 tail_duplicate(N, T, Acc) when N > 0 -> tail_duplicate(N - 1, T, [T | Acc]).
 
 tail_duplicate_test() ->
