@@ -2,3 +2,9 @@ language: erlang
 
 otp_release:
   - 19.3
+
+install:
+  - make
+
+script:
+  - make test
