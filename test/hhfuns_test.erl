@@ -20,3 +20,12 @@ incr_test() ->
 decr_test() ->
     ?assertEqual([], lists:map(fun hhfuns:decr/1, [])),
     ?assertEqual([0,1,2], lists:map(fun hhfuns:decr/1, [1,2,3])).
+
+fold_test() ->
+    [H | T] = [1,7,3,5,9,0,2,3],
+    R1 = hhfuns:fold(fun (A, B) when A > B -> A; (_, B) -> B end, H, T),
+    R2 = hhfuns:fold(fun (A, B) when A < B -> A; (_, B) -> B end, H, T),
+    R3 = hhfuns:fold(fun (A, B) -> A + B end, 0, lists:seq(1, 6)),
+    ?assertEqual(9, R1),
+    ?assertEqual(0, R2),
+    ?assertEqual(21, R3).

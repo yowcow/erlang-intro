@@ -128,3 +128,22 @@ sum([H | T], Sum) -> sum(T, Sum + H).
 
 sum_test() ->
     ?assertEqual(6, sum([1,2,3])).
+
+%% seq/2, seq/3
+seq(From, To) -> seq(From, To, []).
+
+seq(From, From, List) -> [From | List];
+seq(From, To, List) when From < To -> seq(From, To - 1, [To | List]);
+seq(_, _, _) -> throw(infinite_seq).
+
+seq_test() ->
+    ?assertEqual([1], seq(1, 1)),
+    ?assertEqual([1,2], seq(1, 2)),
+    ?assertEqual([1,2,3], seq(1, 3)).
+
+seq_throw_test() ->
+    try seq(2, 1) of
+        _ -> ?assert(false)
+    catch
+        Thrown -> ?assertEqual(infinite_seq, Thrown)
+    end.

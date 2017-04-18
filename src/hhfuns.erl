@@ -1,4 +1,5 @@
 -module(hhfuns).
+
 -compile(export_all).
 
 one() -> 1.
@@ -14,3 +15,6 @@ decrement([H | T]) -> [H - 1 | decrement(T)].
 
 incr(X) -> X + 1.
 decr(X) -> X - 1.
+
+fold(_, Start, []) -> Start;
+fold(F, Start, [H | T]) -> fold(F, F(H, Start), T).
