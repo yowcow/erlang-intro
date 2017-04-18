@@ -57,6 +57,7 @@ lists_comprehension_test() ->
     Result = [X + Y || X <- [1,2], Y <- [2,3]],
     ?assertEqual([3,4,4,5], Result).
 
+%% reverse/1, reverse/2
 reverse(List) ->
     reverse(List, []).
 
@@ -70,6 +71,7 @@ reverse_test() ->
     Result = reverse([1,2,3,4]),
     ?assertEqual([4,3,2,1], Result).
 
+%% list_max/1, list_max/2
 list_max([Head | Rest]) ->
     list_max(Rest, Head).
 
@@ -117,3 +119,12 @@ list_seq_test() ->
 list_flatten_test() ->
     Result = lists:flatten([[1,2], [[3]], [[[4]]]]),
     ?assertEqual([1,2,3,4], Result).
+
+%% sum/1, sum/2
+sum(L) -> sum(L, 0).
+
+sum([], Sum) -> Sum;
+sum([H | T], Sum) -> sum(T, Sum + H).
+
+sum_test() ->
+    ?assertEqual(6, sum([1,2,3])).
