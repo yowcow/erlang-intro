@@ -147,3 +147,9 @@ seq_throw_test() ->
     catch
         Thrown -> ?assertEqual(infinite_seq, Thrown)
     end.
+
+list_foldl_test() ->
+    Sum = lists:foldl(fun (X, Sum) -> X + Sum end, 0, [1,2,3,4]),
+    Prd = lists:foldl(fun (X, Prd) -> X * Prd end, 1, [1,2,3,4]),
+    ?assertEqual(10, Sum),
+    ?assertEqual(24, Prd).
