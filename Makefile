@@ -15,4 +15,4 @@ eunit:
 	$(REBAR) eunit
 
 clean:
-	-rm -rf $(REBAR) _build
+	-rm -rf $(REBAR) _build *.beam
