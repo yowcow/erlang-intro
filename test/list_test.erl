@@ -57,6 +57,23 @@ lists_comprehension_test() ->
     Result = [X + Y || X <- [1,2], Y <- [2,3]],
     ?assertEqual([3,4,4,5], Result).
 
+%% odds_and_evens/1, odds_end_evens/3
+odds_and_evens(L) ->
+    odds_and_evens(L, [], []).
+
+odds_and_evens([], Odds, Evens) ->
+    {lists:reverse(Odds), lists:reverse(Evens)};
+odds_and_evens([H | T], Odds, Evens) ->
+    case H rem 2 of
+        1 -> odds_and_evens(T, [H | Odds], Evens);
+        0 -> odds_and_evens(T, Odds, [H | Evens])
+    end.
+
+odds_and_evens_test() ->
+    ?assertEqual(
+        {[1,3,5,7], [2,4,6,8]},
+        odds_and_evens(lists:seq(1, 8))).
+
 %% reverse/1, reverse/2
 reverse(List) ->
     reverse(List, []).
@@ -153,3 +170,16 @@ list_foldl_test() ->
     Prd = lists:foldl(fun (X, Prd) -> X * Prd end, 1, [1,2,3,4]),
     [   ?_assertEqual(10, Sum),
         ?_assertEqual(25, Prd)].
+
+%% for/3, for/4
+for(Min, Max, F) ->
+    for(Min, Max, F, []).
+
+for(Min, Min, F, Acc) ->
+    [F(Min) | Acc];
+for(Min, Max, F, Acc) ->
+    for(Min, Max - 1, F, [F(Max) | Acc]).
+
+for_test_() ->
+    [   ?_assertEqual([1,2,3,4,5], for(1, 5, fun(X) -> X end)),
+        ?_assertEqual([2], for(1, 1, fun (X) -> X * 2 end))].
