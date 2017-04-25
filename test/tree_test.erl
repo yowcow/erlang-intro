@@ -74,13 +74,13 @@ insert_overwrites_tree_test() ->
                 {node, 'nil'}}},
             {node, 'nil'}}}, T3).
 
-lookup_a_tree_test() ->
+lookup_a_tree_test_() ->
     T1 = tree:insert("Hoge", "hoge@some-email", tree:empty()),
     T2 = tree:insert("Fuga", "fuga@some-email", T1),
     T3 = tree:insert("ZZZZ", "zzzz@some-email", T2),
     T4 = tree:insert("YYYY", "yyyy@some-email", T3),
     T5 = tree:insert("YYYY", "yyy2@some-email", T4),
-    ?assertEqual({ok, "hoge@some-email"}, tree:lookup("Hoge", T5)),
-    ?assertEqual({ok, "fuga@some-email"}, tree:lookup("Fuga", T5)),
-    ?assertEqual({ok, "zzzz@some-email"}, tree:lookup("ZZZZ", T5)),
-    ?assertEqual({ok, "yyy2@some-email"}, tree:lookup("YYYY", T5)).
+    [   ?_assertEqual({ok, "hoge@some-email"}, tree:lookup("Hoge", T5)),
+        ?_assertEqual({ok, "fuga@some-email"}, tree:lookup("Fuga", T5)),
+        ?_assertEqual({ok, "zzzz@some-email"}, tree:lookup("ZZZZ", T5)),
+        ?_assertEqual({ok, "yyy2@some-email"}, tree:lookup("YYYY", T5))].

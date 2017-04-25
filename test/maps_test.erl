@@ -2,11 +2,11 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
-create_map_test() ->
+create_map_test_() ->
     Map = #{"foo" => "bar", "hoge" => "fuga"},
     #{"foo" := Res1, "hoge" := Res2} = Map,
-    ?assertEqual("bar", Res1),
-    ?assertEqual("fuga", Res2).
+    [   ?_assertEqual("bar", Res1),
+        ?_assertEqual("fuga", Res2)].
 
 add_key_to_map_test() ->
     Map = #{"foo" => "bar"},

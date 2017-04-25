@@ -18,9 +18,9 @@ simple_and_condition(X, Y) ->
         true -> false
     end.
 
-simple_and_condition_test() ->
-    ?assertEqual(true, simple_and_condition(1, 1)),
-    ?assertEqual(false, simple_and_condition(1, 2)).
+simple_and_condition_test_() ->
+    [   ?_assertEqual(true, simple_and_condition(1, 1)),
+        ?_assertEqual(false, simple_and_condition(1, 2))].
 
 simple_or_condition(X, Y) ->
     if
@@ -28,11 +28,11 @@ simple_or_condition(X, Y) ->
         true -> false
     end.
 
-simple_or_condition_test() ->
-    ?assertEqual(true, simple_or_condition(1, 1)),
-    ?assertEqual(true, simple_or_condition(1, 2)),
-    ?assertEqual(true, simple_or_condition(2, 1)),
-    ?assertEqual(false , simple_or_condition(2, 2)).
+simple_or_condition_test_() ->
+    [   ?_assertEqual(true, simple_or_condition(1, 1)),
+        ?_assertEqual(true, simple_or_condition(1, 2)),
+        ?_assertEqual(true, simple_or_condition(2, 1)),
+        ?_assertEqual(false , simple_or_condition(2, 2))].
 
 help_me(Animal) ->
     Talk = if
@@ -44,10 +44,10 @@ help_me(Animal) ->
     end,
     {Animal, "says " ++ Talk ++ "!"}.
 
-help_me_test() ->
-    ?assertEqual({cat, "says meow!"}, help_me(cat)),
-    ?assertEqual({tree, "says bark!"}, help_me(tree)),
-    ?assertEqual({hoge, "says hogefuga!"}, help_me(hoge)).
+help_me_test_() ->
+    [   ?_assertEqual({cat, "says meow!"}, help_me(cat)),
+        ?_assertEqual({tree, "says bark!"}, help_me(tree)),
+        ?_assertEqual({hoge, "says hogefuga!"}, help_me(hoge))].
 
 beach(Temp) ->
     case Temp of
@@ -61,20 +61,20 @@ beach(Temp) ->
             "avoid beach"
     end.
 
-beach_with_c_test() ->
-    ?assertEqual("avoid beach", beach({c, 19})),
-    ?assertEqual("favorable", beach({c, 20})),
-    ?assertEqual("favorable", beach({c, 45})),
-    ?assertEqual("avoid beach", beach({c, 46})).
+beach_with_c_test_() ->
+    [   ?_assertEqual("avoid beach", beach({c, 19})),
+        ?_assertEqual("favorable", beach({c, 20})),
+        ?_assertEqual("favorable", beach({c, 45})),
+        ?_assertEqual("avoid beach", beach({c, 46}))].
 
-beach_with_k_test() ->
-    ?assertEqual("avoid beach", beach({k, 292})),
-    ?assertEqual("scientifically favorable", beach({k, 293})),
-    ?assertEqual("scientifically favorable", beach({k, 318})),
-    ?assertEqual("avoid beach", beach({k, 319})).
+beach_with_k_test_() ->
+    [   ?_assertEqual("avoid beach", beach({k, 292})),
+        ?_assertEqual("scientifically favorable", beach({k, 293})),
+        ?_assertEqual("scientifically favorable", beach({k, 318})),
+        ?_assertEqual("avoid beach", beach({k, 319}))].
 
-beach_with_f_test() ->
-    ?assertEqual("avoid beach", beach({f, 67})),
-    ?assertEqual("favorable in the US", beach({f, 68})),
-    ?assertEqual("favorable in the US", beach({f, 113})),
-    ?assertEqual("avoid beach", beach({f, 114})).
+beach_with_f_test_() ->
+    [   ?_assertEqual("avoid beach", beach({f, 67})),
+        ?_assertEqual("favorable in the US", beach({f, 68})),
+        ?_assertEqual("favorable in the US", beach({f, 113})),
+        ?_assertEqual("avoid beach", beach({f, 114}))].

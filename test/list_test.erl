@@ -38,7 +38,7 @@ list_comprehension_with_constraint_test() ->
     Result = [X || X <- List, X rem 2 =:= 0],
     ?assertEqual([2,4,6,8,10], Result).
 
-list_comprehension_with_tuple_test() ->
+list_comprehension_with_tuple_test_() ->
     Menu = [{steak, 5.99},
             {beer, 3.99},
             {poutine, 3.50},
@@ -46,12 +46,12 @@ list_comprehension_with_tuple_test() ->
             {water, 0.00}],
     Menu_over_4 = [{Item, Price} || {Item, Price} <- Menu, Price >= 4.0],
     Menu_over_4_with_tax = [{Item, Price * 1.07} || {Item, Price} <- Menu_over_4],
-    ?assertEqual(
-            [{steak, 5.99}, {kitten, 20.99}],
-            Menu_over_4),
-    ?assertEqual(
-            [{steak,6.409300000000001}, {kitten,22.4593}],
-            Menu_over_4_with_tax).
+    [   ?_assertEqual(
+                [{steak, 5.99}, {kitten, 20.99}],
+                Menu_over_4),
+        ?_assertEqual(
+                [{steak,6.409300000000001}, {kitten,22.4593}],
+                Menu_over_4_with_tax)].
 
 lists_comprehension_test() ->
     Result = [X + Y || X <- [1,2], Y <- [2,3]],
@@ -136,10 +136,10 @@ seq(From, From, List) -> [From | List];
 seq(From, To, List) when From < To -> seq(From, To - 1, [To | List]);
 seq(_, _, _) -> throw(infinite_seq).
 
-seq_test() ->
-    ?assertEqual([1], seq(1, 1)),
-    ?assertEqual([1,2], seq(1, 2)),
-    ?assertEqual([1,2,3], seq(1, 3)).
+seq_test_() ->
+    [   ?_assertEqual([1], seq(1, 1)),
+        ?_assertEqual([1,2], seq(1, 2)),
+        ?_assertEqual([1,2,3], seq(1, 3))].
 
 seq_throw_test() ->
     try seq(2, 1) of
@@ -151,5 +151,5 @@ seq_throw_test() ->
 list_foldl_test() ->
     Sum = lists:foldl(fun (X, Sum) -> X + Sum end, 0, [1,2,3,4]),
     Prd = lists:foldl(fun (X, Prd) -> X * Prd end, 1, [1,2,3,4]),
-    ?assertEqual(10, Sum),
-    ?assertEqual(24, Prd).
+    [   ?_assertEqual(10, Sum),
+        ?_assertEqual(25, Prd)].
