@@ -1,5 +1,7 @@
 *.beam
+*.dump
 /_build
+/data/*.tmp
 /log
 /rebar.lock
 /rebar3
