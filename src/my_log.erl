@@ -1,9 +1,6 @@
 -module(my_log).
 
--export([start/0, err/1, info/1]).
-
-start() ->
-    lager:start().
+-export([err/1, info/1]).
 
 err(Msg) ->
     lager:error(Msg).
