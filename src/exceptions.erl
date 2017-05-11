@@ -46,3 +46,14 @@ catcher(X, Y) ->
         {'EXIT', {badarith, _}} -> "uh oh";
         N -> N
     end.
+
+read_stacktrace(Given) ->
+    O = 1234,
+    F = fun () ->
+            O = Given
+        end,
+    try F() of
+        _ -> nothing_has_happened
+    catch
+        _:_ -> erlang:get_stacktrace()
+    end.
