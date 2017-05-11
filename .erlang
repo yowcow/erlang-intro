@@ -1,8 +1,3 @@
 EbinPaths = ["_build/default/lib/my_module/ebin"].
 
-lists:map(fun (Path) ->
-            case lists:member(Path, code:get_path()) of
-              false -> code:add_path(Path);
-              true  -> true
-            end
-          end, EbinPaths).
+lists:map(fun (Path) -> code:add_path(Path) end, EbinPaths).
