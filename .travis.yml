@@ -6,5 +6,8 @@ otp_release:
 install:
   - make
 
+before_script:
+  - perl -v
+
 script:
   - make test
