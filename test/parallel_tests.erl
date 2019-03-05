@@ -86,3 +86,31 @@ on_exit_test_() ->
         ?_assertEqual(ok, Ready),
         ?_assertEqual(Pid, FromPid)
     ].
+
+division(0) -> done;
+division(Calls) ->
+    receive
+        {From, X, Y} ->
+            From ! X / Y,
+            division(Calls - 1)
+    end.
+
+receive_exit() ->
+    receive
+        {'EXIT', Pid, {Cause, _}} -> {Pid, Cause}
+    end.
+
+spawn_link_test_() ->
+    process_flag(trap_exit, true),
+    Pid = spawn_link(fun() ->
+        division(2)
+    end),
+    Pid ! {self(), 4, 2},
+    Res1 = receive_without_timeout(),
+    Pid ! {self(), 5, 0},
+    {ExitedPid, Cause} = receive_exit(),
+    [
+        ?_assertEqual(2.0, Res1),
+        ?_assertEqual(Pid, ExitedPid),
+        ?_assertEqual(badarith, Cause)
+    ].
