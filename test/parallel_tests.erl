@@ -5,25 +5,23 @@
 echo() ->
     receive
         {From, Message} ->
-            From ! {self(), Message}
+            From ! {reply, {self(), Message}}
     end.
 
 receive_without_timeout() ->
     receive
-        Message -> Message
+        {reply, Msg} -> {reply, Msg};
+        Msg -> Msg
     end.
 
 spawn_receive_test() ->
+    process_flag(trap_exit, true),
     Pid = spawn(fun echo/0),
     Pid ! {self(), hello_world},
-    {From, Message} = receive_without_timeout(),
+    {reply, {From, Message}} = receive_without_timeout(),
     ?assertEqual(Pid, From),
-    ?assertEqual(hello_world, Message).
-
-dead_echo() ->
-    receive
-        _ -> i_am_dead
-    end.
+    ?assertEqual(hello_world, Message),
+    process_flag(trap_exit, false).
 
 receive_with_timeout() ->
     receive
@@ -32,10 +30,10 @@ receive_with_timeout() ->
     end.
 
 spawn_receive_timeout_test() ->
-    Pid = spawn(fun dead_echo/0),
-    Pid ! {self(), hello_world},
+    process_flag(trap_exit, true),
     Ret = receive_with_timeout(),
-    ?assertEqual(timed_out, Ret).
+    ?assertEqual(timed_out, Ret),
+    process_flag(trap_exit, false).
 
 start_echo() ->
     Name = myechopid,
@@ -47,7 +45,7 @@ register_test_() ->
     Name = start_echo(),
     Pid0 = whereis(Name),
     Pid0 ! {self(), hello_world},
-    {_, Actual} = receive_without_timeout(),
+    {reply, {_, Actual}} = receive_without_timeout(),
     Pid1 = whereis(Name),
     [
         ?_assertEqual(hello_world, Actual),

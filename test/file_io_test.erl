@@ -88,6 +88,7 @@ write_writer(Msg) ->
 quit_writer() ->
     writer ! {quit, self()},
     receive
+        {'EXIT', _, normal} -> ok;
         Resp -> Resp
     end.
 
@@ -116,6 +117,7 @@ read_reader() ->
 quit_reader() ->
     reader ! {quit, self()},
     receive
+        {'EXIT', _, normal} -> ok;
         Resp -> Resp
     end.
 
