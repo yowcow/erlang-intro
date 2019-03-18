@@ -107,8 +107,25 @@ spawn_link_test_() ->
     Res1 = receive_without_timeout(),
     Pid ! {self(), 5, 0},
     {ExitedPid, Cause} = receive_exit(),
+    process_flag(trap_exit, false),
     [
         ?_assertEqual(2.0, Res1),
         ?_assertEqual(Pid, ExitedPid),
         ?_assertEqual(badarith, Cause)
     ].
+
+monitor_test() ->
+    erlang:monitor(process, spawn(fun() -> timer:sleep(500) end)),
+    {'DOWN', _, process, _, normal} = receive X -> X end.
+
+demonitor_test() ->
+    {Pid, Ref} = erlang:spawn_monitor(fun() ->
+        receive
+            {From, Msg} ->
+                From ! Msg,
+                exit(bye)
+        end
+    end),
+    true = erlang:demonitor(Ref),
+    Pid ! {self(), helloworld},
+    helloworld = receive X -> X end.
