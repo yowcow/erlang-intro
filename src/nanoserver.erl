@@ -1,6 +1,7 @@
 -module(nanoserver).
 
 -export([
+    start/0,
     start/1,
     stop/0
 ]).
@@ -51,8 +52,16 @@ broadcast([To | Socks], From, Bin) ->
     gen_tcp:send(To, Msg),
     broadcast(Socks, From, Bin).
 
+start() ->
+    {ok, Listen} = gen_tcp:listen(0, [binary, {packet, 0}, {reuseaddr, true}, {active, true}]),
+    ok = startup(Listen),
+    inet:port(Listen).
+
 start(Addr) ->
     {ok, Listen} = gen_tcp:listen(Addr, [binary, {packet, 0}, {reuseaddr, true}, {active, true}]),
+    startup(Listen).
+
+startup(Listen) ->
     Pid = spawn_link(fun() -> server(Listen, []) end),
     register(nanoserver, Pid),
     spawn(fun() -> par_connect(Listen) end),
