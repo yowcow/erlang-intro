@@ -26,10 +26,10 @@ server(Port) ->
 
 loop(Sock) ->
     receive
-        {udp, Sock, Host, Port, Bin} = Msg ->
-            N = binary_to_term(Bin),
+        {udp, Sock, Host, Port, Bin} ->
+            {Ref, N} = binary_to_term(Bin),
             Fac = fac(N),
-            gen_udp:send(Sock, Host, Port, term_to_binary(Fac)),
+            gen_udp:send(Sock, Host, Port, term_to_binary({Ref, Fac})),
             loop(Sock);
         {stop, From} ->
             From ! ok
@@ -40,11 +40,18 @@ fac(N) -> N * fac(N - 1).
 
 client(N) ->
     {ok, Sock} = gen_udp:open(0, [binary]),
-    ok = gen_udp:send(Sock, "localhost", ?SERVER_PORT, term_to_binary(N)),
-    Value = receive
-        {udp, Sock, _, _, Bin} = Msg ->
-            binary_to_term(Bin)
-    after 500 -> 0
-    end,
+    Ref = make_ref(),
+    ok = gen_udp:send(Sock, "localhost", ?SERVER_PORT, term_to_binary({Ref, N})),
+    Value = receive_ref(Sock, Ref),
     gen_udp:close(Sock),
     Value.
+
+receive_ref(Sock, Ref) ->
+    receive
+        {udp, Sock, _, _, Bin} ->
+            case binary_to_term(Bin) of
+                {Ref, Value} -> Value;
+                _            -> receive_ref(Sock, Ref)
+            end
+    after 500 -> 0
+    end.
