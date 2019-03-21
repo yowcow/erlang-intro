@@ -27,7 +27,6 @@ server(Port) ->
 loop(Sock) ->
     receive
         {udp, Sock, Host, Port, Bin} = Msg ->
-            erlang:display({server, Msg}),
             N = binary_to_term(Bin),
             Fac = fac(N),
             gen_udp:send(Sock, Host, Port, term_to_binary(Fac)),
@@ -44,7 +43,6 @@ client(N) ->
     ok = gen_udp:send(Sock, "localhost", ?SERVER_PORT, term_to_binary(N)),
     Value = receive
         {udp, Sock, _, _, Bin} = Msg ->
-            erlang:display({client, Msg}),
             binary_to_term(Bin)
     after 500 -> 0
     end,
