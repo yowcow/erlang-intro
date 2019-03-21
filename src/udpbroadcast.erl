@@ -40,7 +40,6 @@ stop_listen(Pid) ->
     receive X -> X end.
 
 listen(Writer) ->
-    erlang:display(Writer),
     {ok, _} = gen_udp:open(?SERVER_PORT, [binary]),
     loop(Writer).
 
