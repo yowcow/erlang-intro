@@ -15,6 +15,13 @@ transaction_test_() ->
             end
         },
         {
+            "withdraw from secret backdoor account",
+            fun() ->
+                Actual = my_bank:withdraw("backdoor", 100),
+                ?assertEqual({thanks, "backdoor", your_balance_is, 900}, Actual)
+            end
+        },
+        {
             "deposit to non-existing account",
             fun() ->
                 Actual = my_bank:deposit("joe", 100),
@@ -82,6 +89,13 @@ transaction_test_() ->
             fun() ->
                 Actual = my_bank:withdraw("joe", 101),
                 ?assertEqual({sorry, "joe", you_only_have, 100, in_the_bank}, Actual)
+            end
+        },
+        {
+            "withdraw valid amount",
+            fun() ->
+                Actual = my_bank:withdraw("joe", 100),
+                ?assertEqual({thanks, "joe", your_balance_is, 0}, Actual)
             end
         },
         {

