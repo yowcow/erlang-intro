@@ -1,4 +1,4 @@
--module(name_server_on_server1).
+-module(name_server1).
 
 -export([
     init/0,
