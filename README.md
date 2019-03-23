@@ -2,3 +2,7 @@
 
 My Intro to Erlang
 ==================
+
+With docker, do:
+
+    % make -f docker.mk all cmn/test

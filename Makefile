@@ -1,13 +1,9 @@
 .PHONY: test eunit hello clean
 
-REBAR := ./rebar3
+REBAR := rebar3
 
-all: $(REBAR)
+all:
 	$(REBAR) compile
-
-$(REBAR):
-	curl -LO https://s3.amazonaws.com/rebar3/rebar3
-	chmod +x rebar3
 
 test: eunit
 
