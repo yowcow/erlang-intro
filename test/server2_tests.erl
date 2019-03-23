@@ -17,8 +17,12 @@ handle(incr, Dict) ->
 handle(get, Dict) ->
     {ok, Count} = dict:find(count, Dict),
     {Count, Dict};
-handle(fail, _) ->
-    exit(handle_failed).
+handle(exit, _) ->
+    exit(exited);
+handle(throw, _) ->
+    throw(thrown);
+handle(error, _) ->
+    erlang:error(errored).
 
 start_handle_stop_test() ->
     Name = test_server,
@@ -34,5 +38,10 @@ start_handle_fail_stop_test() ->
     Name = test_server,
     true = server2:start(Name, ?MODULE),
     ok = server2:rpc(Name, incr),
-    crashed = server2:rpc(Name, fail),
-    stopped = server2:stop(Name).
+    crashed = server2:rpc(Name, exit),
+    crashed = server2:rpc(Name, throw),
+    crashed = server2:rpc(Name, error),
+    ok = server2:rpc(Name, incr),
+    Count = server2:rpc(Name, get),
+    stopped = server2:stop(Name),
+    ?assertEqual(2, Count).
