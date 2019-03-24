@@ -9,4 +9,4 @@ erl:
 cmd/%:
 	docker run $(DOCKER_RUN_OPT) erlang sh -c 'make $*'
 
-.PHONY: all
+.PHONY: all erl cmd/%
