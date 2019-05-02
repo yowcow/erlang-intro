@@ -29,7 +29,7 @@ render_test_() ->
                     ]
                 }
             ],
-            "<?xml version=\"1.0\"?>"
+            "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
             "<items count=\"2\">"
             "<fruit color=\"red\" produced=\"2019-05-02T16:06:53+09:00\"><name>apple</name></fruit>"
             "<fruit color=\"orange\" produced=\"2019-05-02T16:06:53+09:00\"><name>orange</name></fruit>"
@@ -73,7 +73,7 @@ render_test_() ->
                     ]
                 }
             ],
-            "<?xml version=\"1.0\"?>"
+            "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
             "<items count=\"2\">"
             "<fruit color=\"red\" produced=\"2019-05-02T16:06:53+09:00\"><name>apple</name></fruit>"
             "<fruit color=\"orange\" produced=\"2019-05-02T16:06:53+09:00\"><name>orange</name></fruit>"
@@ -81,7 +81,9 @@ render_test_() ->
         }
     ],
     F = fun({Name, Input, Expected}) ->
-        Actual = lists:flatten(xmerl:export_simple(Input, xmerl_xml)),
+        Actual = lists:flatten(xmerl:export_simple(Input, xmerl_xml, [{prolog, [
+            "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+        ]}])),
         {Name, ?_assertEqual(Expected, Actual)}
     end,
     lists:map(F, Cases).
