@@ -140,3 +140,21 @@ writer_reader_test() ->
         ?_assertEqual({ok, [{hoge, hoge}, {fuga, fuga}]}, Msg3),
         ?_assertEqual(eof, Msg4)
     ].
+
+file_consult_test_() ->
+    {ok, Actual} = file:consult("data/fuga.dat"),
+    Expected = [
+                {person, "joe", "armstrong",
+                 [
+                  {occupation, programmer},
+                  {favoriteLanguage, erlang}
+                 ]
+                },
+                {cat,
+                 {name, "zorro"},
+                 {owner, "joe"}
+                }
+               ],
+    [
+     ?_assertEqual(Expected, Actual)
+    ].
