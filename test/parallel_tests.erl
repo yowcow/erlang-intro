@@ -2,6 +2,28 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
+spawn_and_exit_test_() ->
+    [
+     {"spawn ok fun", fun() ->
+                              Self = self(),
+                              Ret = link(spawn(fun () -> Self ! ok end)),
+                              Result = receive X -> X end,
+                              ?assertEqual(true, Ret),
+                              ?assertEqual(ok, Result)
+                      end},
+     {"spawn ng fun", fun() ->
+                              %% trap exit in mailbox
+                              false = process_flag(trap_exit, true),
+                              %% spawn with link to detect dead child
+                              Pid = spawn_link(fun () -> exit(foobar) end),
+                              Result = receive X -> X end,
+                              %% no more exit messages in mailbox
+                              true = process_flag(trap_exit, false),
+                              ?assertEqual({'EXIT', Pid, foobar}, Result)
+                      end}
+    ].
+
+
 echo() ->
     receive
         {From, Message} ->
@@ -14,14 +36,14 @@ receive_without_timeout() ->
         Msg -> Msg
     end.
 
-spawn_receive_test() ->
-    process_flag(trap_exit, true),
+spawn_receive_test_() ->
     Pid = spawn(fun echo/0),
     Pid ! {self(), hello_world},
     {reply, {From, Message}} = receive_without_timeout(),
-    ?assertEqual(Pid, From),
-    ?assertEqual(hello_world, Message),
-    process_flag(trap_exit, false).
+    [
+     ?_assertEqual(Pid, From),
+     ?_assertEqual(hello_world, Message)
+    ].
 
 receive_with_timeout() ->
     receive
@@ -30,11 +52,11 @@ receive_with_timeout() ->
         50 -> timed_out
     end.
 
-spawn_receive_timeout_test() ->
-    process_flag(trap_exit, true),
+spawn_receive_timeout_test_() ->
     Ret = receive_with_timeout(),
-    ?assertEqual(timed_out, Ret),
-    process_flag(trap_exit, false).
+    [
+     ?_assertEqual(timed_out, Ret)
+    ].
 
 start_echo() ->
     Name = myechopid,
