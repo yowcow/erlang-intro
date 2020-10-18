@@ -1,6 +1,15 @@
 -module(hhfuns).
 
--compile(export_all).
+-export([
+         one/0,
+         two/0,
+         add/2,
+         increment/1,
+         decrement/1,
+         incr/1,
+         decr/1,
+         fold/3
+        ]).
 
 one() -> 1.
 two() -> 2.
