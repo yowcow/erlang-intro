@@ -1,5 +1,3 @@
-.PHONY: test eunit hello clean
-
 REBAR := rebar3
 
 all:
@@ -14,4 +12,9 @@ hello:
 	erl -noshell -s hello_world start -s init stop
 
 clean:
-	-rm -rf $(REBAR) _build *.beam
+	$(REBAR) clean
+
+realclean: clean
+	-rm -rf _build *.beam
+
+.PHONY: all test eunit hello clean realclean

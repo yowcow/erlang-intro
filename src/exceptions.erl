@@ -1,6 +1,14 @@
 -module(exceptions).
 
--compile(export_all).
+-export([
+         throws/1,
+         errors/1,
+         exits/1,
+         sword/1,
+         talk/0,
+         black_knight/1,
+         catcher/2
+        ]).
 
 throws(F) ->
     try F() of
@@ -45,15 +53,4 @@ catcher(X, Y) ->
     case catch X/Y of
         {'EXIT', {badarith, _}} -> "uh oh";
         N -> N
-    end.
-
-read_stacktrace(Given) ->
-    O = 1234,
-    F = fun () ->
-            O = Given
-        end,
-    try F() of
-        _ -> nothing_has_happened
-    catch
-        _:_ -> erlang:get_stacktrace()
     end.

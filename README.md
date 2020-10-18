@@ -3,6 +3,6 @@
 My Intro to Erlang
 ==================
 
-With docker, do:
+Do:
 
-    % make -f docker.mk all cmn/test
+    make all test
