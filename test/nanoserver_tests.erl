@@ -23,11 +23,23 @@ start_stop_test() ->
     {ok, _} = nanoserver:start(),
     ok = nanoserver:stop().
 
-connect_test() ->
-    {ok, Port} = nanoserver:start(),
-    {ok, Sock} = connect(Port),
-    ok = close(Sock),
-    ok = nanoserver:stop().
+connect_test_() ->
+    %% I have no idea what I was trying to do
+    {setup,
+     fun() ->
+             error_logger:tty(false)
+     end,
+     fun(ok) ->
+             error_logger:tty(true)
+     end,
+     fun(ok) ->
+             [fun() ->
+                      {ok, Port} = nanoserver:start(),
+                      {ok, Sock} = connect(Port),
+                      ok = close(Sock),
+                      ok = nanoserver:stop()
+              end]
+     end}.
 
 connect_clients_test() ->
     WelcomeBin = term_to_binary({host, <<"Hi, new client!">>}),
